@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import answer_program  # 导入你的本地问答程序
+import answer_program
 
 app = Flask(__name__)
 
@@ -23,7 +23,10 @@ def chat_completions():
             ]
         }
         return jsonify(response_data)
-    except:
+    except Exception as e:
+        print("------------------------------------------------------------------")
+        print(e) 
+        print("------------------------------------------------------------------")
         return jsonify({"error": "An error occurred"}), 500
 
 if __name__ == '__main__':

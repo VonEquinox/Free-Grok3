@@ -2,7 +2,7 @@ import requests
 import json
 from GrokCookies import cookies_list
 
-cookies = cookies_list[0]
+cookies = cookies_list[9]
 
 headers = {
     'accept': '*/*', 
