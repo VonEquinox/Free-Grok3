@@ -1,0 +1,4 @@
+cookies_list=[
+    {
+    },
+]
