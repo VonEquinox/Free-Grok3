@@ -131,7 +131,7 @@ def ask_grok3_thinking(question):
     for json_obj_str in reversed(response.text.strip().split('\n')):
         try:
             json_obj = json.loads(json_obj_str)
-            return f"以下是思考过程：<Thinking>\n{json_obj['result']['response']['modelResponse']['thinkingTrace']}<Thinking>\n以下是结果:\n{json_obj['result']['response']['modelResponse']['message']}\n"
+            return f"<Thinking>\n{json_obj['result']['response']['modelResponse']['thinkingTrace']}<Thinking>\n{json_obj['result']['response']['modelResponse']['message']}\n"
         except Exception:
             continue
 
