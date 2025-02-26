@@ -2,8 +2,6 @@ import requests
 import json
 from GrokCookies import cookies_list
 
-# cookies = cookies_list[0]
-
 headers = {
     'accept': '*/*', 
     'accept-language': 'zh-CN,zh;q=0.9',
@@ -22,34 +20,86 @@ headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
 }
 
-# first_json_data_grok2 = {
-#     'temporary': False,
-#     'modelName': 'grok-latest',
-#     'message': '',
-#     'fileAttachments': [],
-#     'imageAttachments': [],
-#     'disableSearch': False,
-#     'enableImageGeneration': True,
-#     'returnImageBytes': False,
-#     'returnRawGrokInXaiRequest': False,
-#     'enableImageStreaming': True,
-#     'imageGenerationCount': 2,
-#     'forceConcise': False,
-#     'toolOverrides': {
-#         'imageGen': False,
-#         'webSearch': False,
-#         'xSearch': False,
-#         'xMediaSearch': False,
-#         'trendsSearch': False,
-#         'xPostAnalyze': False,
-#     },
-#     'enableSideBySide': True,
-#     'isPreset': False,
-#     'sendFinalMetadata': True,
-#     'customInstructions': '',
-#     'deepsearchPreset': '',
-#     'isReasoning': False,
-# }
+first_json_data_grok2 = {
+    'temporary': False,
+    'modelName': 'grok-latest',
+    'message': '',
+    'fileAttachments': [],
+    'imageAttachments': [],
+    'disableSearch': False,
+    'enableImageGeneration': True,
+    'returnImageBytes': False,
+    'returnRawGrokInXaiRequest': False,
+    'enableImageStreaming': True,
+    'imageGenerationCount': 2,
+    'forceConcise': False,
+    'toolOverrides': {
+        'imageGen': False,
+        'webSearch': False,
+        'xSearch': False,
+        'xMediaSearch': False,
+        'trendsSearch': False,
+        'xPostAnalyze': False,
+    },
+    'enableSideBySide': True,
+    'isPreset': False,
+    'sendFinalMetadata': True,
+    'customInstructions': '',
+    'deepsearchPreset': '',
+    'isReasoning': False,
+}
+
+first_json_data_grok3 = {
+    'temporary': False,
+    'modelName': 'grok-3',
+    'message': '',
+    'fileAttachments': [],
+    'imageAttachments': [],
+    'disableSearch': False,
+    'enableImageGeneration': True,
+    'returnImageBytes': False,
+    'returnRawGrokInXaiRequest': False,
+    'enableImageStreaming': True,
+    'imageGenerationCount': 2,
+    'forceConcise': False,
+    'toolOverrides': {},
+    'enableSideBySide': True,
+    'isPreset': False,
+    'sendFinalMetadata': True,
+    'customInstructions': '',
+    'deepsearchPreset': '',
+    'isReasoning': False,
+}
+
+
+grok2_using_times = 0
+def ask_grok2(question):
+    global grok2_using_times
+    first_json_data_grok2['message'] = question
+    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok2_using_times], headers=headers, json=first_json_data_grok2)
+    grok2_using_times = grok2_using_times + 1
+    grok2_using_times = grok2_using_times % 10
+    for json_obj_str in reversed(response.text.strip().split('\n')):
+        try:
+            json_obj = json.loads(json_obj_str)
+            return f"{json_obj['result']['response']['modelResponse']['message']}\n"
+        except Exception:
+            continue
+
+grok3_using_times = 0
+def ask_grok3(question):
+    global grok3_using_times
+    first_json_data_grok3['message'] = question
+    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_using_times], headers=headers, json=first_json_data_grok3)
+    grok3_using_times = grok3_using_times + 1
+    grok3_using_times = grok3_using_times % 10
+    for json_obj_str in reversed(response.text.strip().split('\n')):
+        try:
+            json_obj = json.loads(json_obj_str)
+            return f"{json_obj['result']['response']['modelResponse']['message']}\n"
+        except Exception:
+            continue
+
 
 # next_json_data_grok2 = {
 #     'message': '',
@@ -78,28 +128,6 @@ headers = {
 #     'deepsearchPreset': '',
 # }
 
-first_json_data_grok3 = {
-    'temporary': False,
-    'modelName': 'grok-3',
-    'message': '',
-    'fileAttachments': [],
-    'imageAttachments': [],
-    'disableSearch': False,
-    'enableImageGeneration': True,
-    'returnImageBytes': False,
-    'returnRawGrokInXaiRequest': False,
-    'enableImageStreaming': True,
-    'imageGenerationCount': 2,
-    'forceConcise': False,
-    'toolOverrides': {},
-    'enableSideBySide': True,
-    'isPreset': False,
-    'sendFinalMetadata': True,
-    'customInstructions': '',
-    'deepsearchPreset': '',
-    'isReasoning': False,
-}
-
 # next_json_data_grok3 = {
 #     'message': '',
 #     'modelName': 'grok-3',
@@ -120,20 +148,6 @@ first_json_data_grok3 = {
 #     'deepsearchPreset': '',
 #     'isReasoning': False,
 # }
-
-using_times = 0
-def ask_grok(question):
-    global using_times
-    first_json_data_grok3['message'] = question
-    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[using_times], headers=headers, json=first_json_data_grok3)
-    using_times = using_times + 1
-    using_times = using_times % 10
-    for json_obj_str in reversed(response.text.strip().split('\n')):
-        try:
-            json_obj = json.loads(json_obj_str)
-            return f"{json_obj['result']['response']['modelResponse']['message']}\n"
-        except Exception:
-            continue
 
 # while True:
 #     grok_version = input("Which Grok do you want to ask? [Grok2/Grok3]: ")

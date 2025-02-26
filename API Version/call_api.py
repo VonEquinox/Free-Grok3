@@ -2,7 +2,8 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="http://127.0.0.1:5000/v1"
+    base_url="https://node.meguhx.top:32768/v1"
+    # base_url="http://127.0.0.1:5000/v1"
 )
 
 while True:
