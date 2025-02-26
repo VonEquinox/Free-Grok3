@@ -71,6 +71,27 @@ first_json_data_grok3 = {
     'isReasoning': False,
 }
 
+first_json_data_grok3_thinking = {
+    'temporary': False,
+    'modelName': 'grok-3',
+    'message': '',
+    'fileAttachments': [],
+    'imageAttachments': [],
+    'disableSearch': False,
+    'enableImageGeneration': True,
+    'returnImageBytes': False,
+    'returnRawGrokInXaiRequest': False,
+    'enableImageStreaming': True,
+    'imageGenerationCount': 2,
+    'forceConcise': False,
+    'toolOverrides': {},
+    'enableSideBySide': True,
+    'isPreset': False,
+    'sendFinalMetadata': True,
+    'customInstructions': '',
+    'deepsearchPreset': '',
+    'isReasoning': True,
+}
 
 grok2_using_times = 0
 def ask_grok2(question):
@@ -93,6 +114,20 @@ def ask_grok3(question):
     response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_using_times], headers=headers, json=first_json_data_grok3)
     grok3_using_times = grok3_using_times + 1
     grok3_using_times = grok3_using_times % 10
+    for json_obj_str in reversed(response.text.strip().split('\n')):
+        try:
+            json_obj = json.loads(json_obj_str)
+            return f"{json_obj['result']['response']['modelResponse']['message']}\n"
+        except Exception:
+            continue
+
+grok3_thinking_using_times = 0
+def ask_grok3_thinking(question):
+    global grok3_thinking_using_times
+    first_json_data_grok3_thinking['message'] = question
+    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_thinking_using_times], headers=headers, json=first_json_data_grok3_thinking)
+    grok3_thinking_using_times = grok3_thinking_using_times + 1
+    grok3_thinking_using_times = grok3_thinking_using_times % 10
     for json_obj_str in reversed(response.text.strip().split('\n')):
         try:
             json_obj = json.loads(json_obj_str)

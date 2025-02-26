@@ -13,3 +13,5 @@ def answer_question(question, model):
         return LoveGemini.ask_gemini_thinking(question)
     elif model == "Gemini-2-Pro":
         return LoveGemini.ask_gemini_2pro(question)
+    else:
+        return "FUCK U"
