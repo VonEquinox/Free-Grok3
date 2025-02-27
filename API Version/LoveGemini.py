@@ -5,17 +5,16 @@ client = OpenAI(
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
 )
 
-def ask_gemini_thinking(que)
-response = client.chat.completions.create(
-    model="gemini-2.0-flash-thinking-exp-01-21",
-    n=1,
-    messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {
-            "role": "user",
-            "content": "9.8和9.11比哪个大？"
-        }
-    ]
-)
+def ask_gemini_thinking(question):
+    response = client.chat.completions.create(
+        model="gemini-2.0-flash-thinking-exp-01-21",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {
+                "role": "user",
+                "content": question
+            }
+        ]
+    )
 
-print(response.choices[0].message.content)
+    return response.choices[0].message.content
