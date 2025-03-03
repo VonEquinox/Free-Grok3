@@ -1,6 +1,9 @@
 import requests
 import json
 from GrokCookies import cookies_list
+import cloudscraper
+
+scraper = cloudscraper.create_scraper()
 
 headers = {
     'accept': '*/*', 
@@ -97,7 +100,7 @@ grok2_using_times = 0
 def ask_grok2(question):
     global grok2_using_times
     first_json_data_grok2['message'] = question
-    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok2_using_times], headers=headers, json=first_json_data_grok2)
+    response = scraper.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok2_using_times], headers=headers, json=first_json_data_grok2)
     grok2_using_times = grok2_using_times + 1
     grok2_using_times = grok2_using_times % 10
     for json_obj_str in reversed(response.text.strip().split('\n')):
@@ -111,7 +114,7 @@ grok3_using_times = 0
 def ask_grok3(question):
     global grok3_using_times
     first_json_data_grok3['message'] = question
-    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_using_times], headers=headers, json=first_json_data_grok3)
+    response = scraper.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_using_times], headers=headers, json=first_json_data_grok3)
     grok3_using_times = grok3_using_times + 1
     grok3_using_times = grok3_using_times % 10
     for json_obj_str in reversed(response.text.strip().split('\n')):
@@ -125,7 +128,7 @@ grok3_thinking_using_times = 0
 def ask_grok3_thinking(question):
     global grok3_thinking_using_times
     first_json_data_grok3_thinking['message'] = question
-    response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_thinking_using_times], headers=headers, json=first_json_data_grok3_thinking)
+    response = scraper.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies_list[grok3_thinking_using_times], headers=headers, json=first_json_data_grok3_thinking)
     grok3_thinking_using_times = grok3_thinking_using_times + 1
     grok3_thinking_using_times = grok3_thinking_using_times % 10
     for json_obj_str in reversed(response.text.strip().split('\n')):
@@ -205,7 +208,7 @@ def ask_grok3_thinking(question):
 #     response_result = None
 #     if counter == 1:
 #         grok_first_data['message'] = question
-#         response = requests.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies, headers=headers, json=grok_first_data)
+#         response = scraper.post('https://grok.com/rest/app-chat/conversations/new', cookies=cookies, headers=headers, json=grok_first_data)
 #         # print(response.text)
 #         first_response_json = json.loads(response.text.splitlines()[0])
 #         session_Id = first_response_json['result']['conversation']['conversationId']
@@ -217,7 +220,7 @@ def ask_grok3_thinking(question):
 #         grok_next_data["parentResponseId"] = response_Id
 #     else:
 #         grok_next_data['message'] = question
-#         response = requests.post('https://grok.com/rest/app-chat/conversations/'+session_Id+'/responses', cookies=cookies, headers=headers, json=grok_next_data)
+#         response = scraper.post('https://grok.com/rest/app-chat/conversations/'+session_Id+'/responses', cookies=cookies, headers=headers, json=grok_next_data)
 #         # print(response.text)
 #         grok_next_data["parentResponseId"] = json.loads(response.text.splitlines()[1])['result']['responseId']
 #     response_result = response.text
